@@ -11,6 +11,7 @@ services:
       DB_PASSWORD: '123123'
       BASE_URL: '' # XYShare项目地址
       USER_AGENT: '' # 随便写一个UA
+      NEED_BACKUP_ALL_AT_FIRST: 'True' # 启动项目是否备份所有记录
     volumes:
       - ./main.py:/app/main.py
       - ./conversations_history:/app/conversations_history

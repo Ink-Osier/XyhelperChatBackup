@@ -21,6 +21,8 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 BASE_URL = os.getenv("BASE_URL")
 USER_AGENT = os.getenv("USER_AGENT")
 
+NEED_BACKUP_ALL_AT_FIRST = os.getenv("NEED_BACKUP_ALL_AT_FIRST", "False").lower() == "true"
+
 # 定义数据库连接
 def get_db_connection():
     return mysql.connector.connect(
@@ -171,5 +173,5 @@ scheduler.start()
 import flask
 app = flask.Flask(__name__)
 if __name__ == '__main__':
-    backup_unit(True)
+    backup_unit(NEED_BACKUP_ALL_AT_FIRST)
     app.run()
