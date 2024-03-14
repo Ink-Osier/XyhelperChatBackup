@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  chat_backup:
+    image: wizerd/xyhelper_chat_backup
+    environment:
+      USER_TOKENS: '[""]'
+      DB_HOST: ''
+      DB_PORT: ''
+      DB_NAME: 'cool'
+      DB_USER: 'cool'
+      DB_PASSWORD: '123123'
+      BASE_URL: '' # XYShare项目地址
+      USER_AGENT: '' # 随便写一个UA
+    volumes:
+      - ./main.py:/app/main.py
+      - ./conversations_history:/app/conversations_history
+      - ./logs:/app/logs
