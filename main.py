@@ -115,16 +115,26 @@ def backup_chat_for_token(usertoken, first_time=False):
 def save_conversation_to_markdown(data, convid, email, usertoken):
     try:
         title = data["title"]
-        create_time = datetime.fromtimestamp(data["create_time"]).strftime('%Y-%m-%d %H:%M:%S')
-        update_time = datetime.fromtimestamp(data["update_time"]).strftime('%Y-%m-%d %H:%M:%S')
         
+        target_timezone = pytz.timezone("Asia/Shanghai")
+
+        # 处理create_time
+        create_time_utc = datetime.fromtimestamp(data["create_time"], pytz.utc)  # 将时间戳转换为UTC的datetime对象
+        create_time_local = create_time_utc.astimezone(target_timezone)  # 转换为目标时区的时间
+        create_time_str = create_time_local.strftime('%Y-%m-%d %H:%M:%S')  # 转换为字符串
+        
+        # 处理update_time
+        update_time_utc = datetime.fromtimestamp(data["update_time"], pytz.utc)  # 同上
+        update_time_local = update_time_utc.astimezone(target_timezone)  # 同上
+        update_time_str = update_time_local.strftime('%Y-%m-%d %H:%M:%S')  # 同上
+
         directory = os.path.join("conversations_history", usertoken, email)
         os.makedirs(directory, exist_ok=True)
         
         with open(os.path.join(directory, f"{title.replace('/', '_')}_{convid}.md"), "w", encoding="utf-8") as file:
             file.write(f"# {title}\n")
-            file.write(f"> 对话创建时间: {create_time}\n")
-            file.write(f"> 对话最近更新时间: {update_time}\n\n")
+            file.write(f"> 对话创建时间: {create_time_str}\n")
+            file.write(f"> 对话最近更新时间: {update_time_str}\n\n")
             
             for _, item in data["mapping"].items():
                 if item["message"] and 'parts' in item["message"]["content"]:
